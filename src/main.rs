@@ -1,8 +1,8 @@
 mod arg;
 mod discorder;
 mod error;
-mod listingstream;
 mod stream;
+mod users_context;
 use clap::Parser;
 use tokio;
 
@@ -25,11 +25,11 @@ impl ToString for Network {
 #[tokio::main]
 async fn main() {
     let cli = arg::App::parse();
-    let stream = if cli.is_testnet {
+    let (stream, recvr) = if cli.is_testnet {
         stream::Stream::new(Network::Testnet, cli.opensea_api_key).await
     } else {
         stream::Stream::new(Network::Mainnet, cli.opensea_api_key).await
     };
 
-    discorder::start_bot(cli.discord_key, stream).await
+    discorder::start_bot(cli.discord_key, stream, recvr).await
 }
