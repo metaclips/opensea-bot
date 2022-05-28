@@ -1,11 +1,10 @@
 use std::{collections::HashMap, sync::Arc};
 
-use crate::stream::Stream;
+use crate::{stream::Stream, users_context};
 use async_trait::async_trait;
 use serenity::{
     model::prelude::Message as DiscordMessage,
     prelude::{Client, Context, EventHandler, GatewayIntents},
-    utils::MessageBuilder,
 };
 use tokio::sync::{mpsc, Mutex};
 use tokio_tungstenite::tungstenite::Message as WebsocketMessage;
@@ -36,8 +35,13 @@ pub async fn start_bot(
         .await
         .expect("Error starting discord handler");
 
-    // client.cache_and_http.http
+    let context = users_context::Context {
+        users: users.clone(),
+        http_link: client.cache_and_http.http.clone(),
+        stream_rcvr,
+    };
 
+    tokio::spawn(async move { context.start_opensea_list_stream().await });
     client.start().await.unwrap()
 }
 

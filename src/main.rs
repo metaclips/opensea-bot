@@ -4,7 +4,6 @@ mod error;
 mod stream;
 mod users_context;
 use clap::Parser;
-use tokio;
 
 pub type Result<T> = std::result::Result<T, error::Error>;
 
@@ -15,9 +14,9 @@ pub enum Network {
 
 impl ToString for Network {
     fn to_string(&self) -> String {
-        match self {
-            &Network::Mainnet => "wss://stream.openseabeta.com/socket".to_string(),
-            &Network::Testnet => "wss://testnets-stream.openseabeta.com/socket".to_string(),
+        match *self {
+            Network::Mainnet => "wss://stream.openseabeta.com/socket".to_string(),
+            Network::Testnet => "wss://testnets-stream.openseabeta.com/socket".to_string(),
         }
     }
 }
