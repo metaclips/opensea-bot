@@ -1,11 +1,14 @@
+use futures_util::stream::SplitStream;
 use serenity::http::Http;
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, net::TcpStream, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
-use tokio_tungstenite::tungstenite::Message;
+use tokio_tungstenite::{tungstenite::Message, MaybeTlsStream, WebSocketStream};
+
+use crate::stream::Websocket;
 
 pub struct Context {
-    pub users: Arc<Mutex<HashMap<String, Vec<String>>>>,
-    pub stream_rcvr: mpsc::Receiver<Message>,
+    pub users: Arc<Mutex<HashMap<u64, Vec<String>>>>,
+    pub stream_rcvr: SplitStream<Websocket>,
     pub http_link: Arc<Http>,
 }
 

@@ -1,4 +1,5 @@
 mod arg;
+mod commands;
 mod discorder;
 mod error;
 mod stream;

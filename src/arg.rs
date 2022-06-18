@@ -4,7 +4,7 @@ use clap::Parser;
 #[clap(author = "metaclips", version = "0.1.0", about = "opensea bot")]
 pub struct App {
     /// Opensea API key
-    #[clap(long)]
+    #[clap(long, default_value = "")]
     pub opensea_api_key: String,
     /// Discord API key
     #[clap(long)]
